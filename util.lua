@@ -30,7 +30,7 @@ end
 --	prints a word, in binary
 function print_word(addr)
     local str = ""
-    for i = 0, bytes_per - 1 do
+    for i = 0, word_size - 1 do
         str = str.." "..@(addr+i)
     end
     print(str)

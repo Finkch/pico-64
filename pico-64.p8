@@ -12,10 +12,10 @@ __lua__
 #include flops.lua
 
 function _init()
-	bytes_per = 8
+	word_size = 8
 	clear_mem(0x4300, 6912)
 	
-	init_memory(bytes_per)
+	init_memory(word_size)
 
 end
 

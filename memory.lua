@@ -12,21 +12,21 @@
 --	last 8 (1) is the 10^power
 
 
-function init_memory(bytes_per)
+function init_memory(word_size)
 	
 	moffset = 0x4300 --	offset to user memory
 	mtotal=6912 --	total memory length (bytes)
 	
 	--	upper limit bit map size
-	bmap = mtotal / bytes_per / 8 + 2 * bytes_per
+	bmap = mtotal / word_size / 8 + 2 * word_size
 	
 	--	number of frames
-	frms = flr((mtotal - bmap) / bytes_per)
+	frms = flr((mtotal - bmap) / word_size)
 	
 	--	tracks available frames
 	f_available = frms
 	
-    bmap_end = mtotal - frms * bytes_per
+    bmap_end = mtotal - frms * word_size
 
 	--	start of float memory
 	mstart = moffset + bmap_end
@@ -167,13 +167,13 @@ end
 --	ensures memory accesses
 --	are legal accesses
 function c_access(o)
-	assert(o<b,"illegal access right ("..o..")")
+	assert(o<word_size,"illegal access right ("..o..")")
 	assert(o>=0,"illegal access left")
 end
 
 --	debug prinout
 function draw_memory()
-	print("bytes: "..bytes_per)
+	print("bytes: "..word_size)
 	print("mtotal:\t"..mtotal)
 	print("frames:\t"..f_available)
 	print("f:\t\t"..frms)
