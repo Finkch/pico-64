@@ -7,6 +7,9 @@ __lua__
 
 #include memory.lua
 #include util.lua
+#include register.lua
+#include inops.lua
+#include flops.lua
 
 function _init()
 	b=8

@@ -1,0 +1,1 @@
+-- emulates a registers for easier handling of numbers during math operations
