@@ -12,8 +12,13 @@ __lua__
 #include flops.lua
 
 function _init()
-	word_size = 8
-	clear_mem(0x4300, 6912)
+	word_size = 8 -- in bytes
+
+	moffset = 0x4300 --	offset to user memory
+	mend = 0x5e00 -- end of user memory
+	mtotal = mend - moffset --	total memory length (bytes)
+
+	clear_mem(0x4300, 0x1B00) -- clears user memory
 	
 	init_memory(word_size)
 

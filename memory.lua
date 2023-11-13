@@ -1,21 +1,14 @@
 --	memory management
---	starts at 0x4300
---	ends at			0x5e00
---	6912 bytes
+
+--	starts at   0x4300 (17152)
+--	ends at     0x5e00 (24064)
+--	length of   0x1B00 (6912)
 
 --	numbers are signed 16-bit
 --	so 2^15-1 is the largest
 --	that's 32767
 
--- 32 bit system
---	first 24 (3) is precision
---	last 8 (1) is the 10^power
-
-
 function init_memory(word_size)
-	
-	moffset = 0x4300 --	offset to user memory
-	mtotal=6912 --	total memory length (bytes)
 	
 	--	upper limit bit map size
 	bmap = mtotal / word_size / 8 + 2 * word_size
@@ -30,9 +23,6 @@ function init_memory(word_size)
 
 	--	start of float memory
 	mstart = moffset + bmap_end
-
-	--	memory end
-	mend = 0x5e00
 end
 
 
@@ -121,24 +111,48 @@ function f_bmap(idx)
 end
 
 
+
+
 -- returns a single bit at a specified memory address
 function is_bit(word_i, bit_i, from_bmap)
 
     -- gets the start of from where to index
     local ms = mstart
     if (from_bmap == nil) from_bmap = moffset
+    
+    -- checks for seg fault
+    can_access(word_i, bit_i, from_bmap)
 
-    return 
+    return (ms + word_i + bit_i \ 8) & (1 << (bit_i % 8))
 
 end
 
 
+function is_zero(word_i, from_bmap)
+end
+
 
 --	ensures memory accesses
 --	are legal accesses
-function c_access(o)
-	assert(o < word_size,"illegal access right ("..o..")")
-	assert(o >= 0,"illegal access left")
+function can_access(w_i, b_i, from_bmap)
+    c_access(b_i)
+    m_access(w_i, from_bmap)
+end
+
+function c_access(b_i)
+	assert(b_i < word_size, "illegal access right ("..b_i..")")
+	assert(b_i >= 0, "illegal access left")
+end
+
+function m_access(w_i, from_bmap)
+
+    -- gets the start of from where to check
+    local ms = mstart
+    if (from_bmap == nil) from_bmap = moffset
+
+    -- checks access
+    assert(ms + w_i < moffset + mtotal, "segmentation fault right")
+    assert(ms + w_i >= moffset, "segmentation fault left")
 end
 
 --	debug prinout
