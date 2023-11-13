@@ -17,8 +17,6 @@ function to_bin(num)
     return bin
 end
 
--- returns a single bit at a specified memory address
-
 
 --	prints address, binary value
 --	at the address, and
