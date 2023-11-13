@@ -12,18 +12,11 @@ __lua__
 #include flops.lua
 
 function _init()
-	b=8
-	e=2
-	clear_mem(0x4300,6912)
+	bytes_per = 8
+	clear_mem(0x4300, 6912)
 	
-	init_memory(b,e)
-	
-	f0=float(-129,0)
-	f1=float(4,0)
-	
-	tx=0b1000.0001
-	
-	--fa=f0+f1
+	init_memory(bytes_per)
+
 end
 
 function _update()
@@ -36,18 +29,9 @@ function _draw()
 	
 	--	prints some of bit-map
 	for i=0,3 do
-		print(print_peek(offset+i))
+		print(print_peek(moffset+i))
 	end
-	print(f0)
-	print(f1)
-	print(fa)
 end
-
--->8
-
--->8
-
--->8
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

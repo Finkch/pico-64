@@ -12,46 +12,46 @@
 --	last 8 (1) is the 10^power
 
 
-function init_memory(b,e)
-	be=b-e
-	s=4
+function init_memory(bytes_per)
 	
-	mtotal=6912 --	total memory
+	moffset = 0x4300 --	offset to user memory
+	mtotal=6912 --	total memory length (bytes)
 	
 	--	upper limit bit map size
-	bmap=mtotal/b/8+2*b
+	bmap = mtotal / bytes_per / 8 + 2 * bytes_per
 	
-	--	frame/bitmap size
-	f=flr((mtotal-bmap)/b)
+	--	number of frames
+	frms = flr((mtotal - bmap) / bytes_per)
 	
 	--	tracks available frames
-	f_available=f
+	f_available = frms
 	
+    bmap_end = mtotal - frms * bytes_per
+
 	--	start of float memory
-	mstart=mtotal-f*b
-	
-	--	offset of user memory
-	offset=0x4300
-	
-	--	actual memory start
-	ms=offset+mstart
+	mstart = moffset + bmap_end
 
 	--	memory end
-	me=0x5e00
+	mend = 0x5e00
 end
 
 
 --	allocates a frame as occupied
 --	returns the frame's index
-function allocate()
+function allocate(fnum)
+
+
 	
 	--	gets the index of the 
 	--	first available frame
-	local faf=get_faf()
+    if (fnan==nil) local faf=get_faf()
 	
 	--	throws error if there's no
 	--	memory available
 	assert(faf, "can't find frame")
+
+    -- ensures frame is empty
+    assert(faf)
 		
 	--	toggles the bitmap
 	toggle_bmap(faf)
@@ -173,11 +173,11 @@ end
 
 --	debug prinout
 function draw_memory()
-	print("bytes: "..b.."\texponent: "..e)
+	print("bytes: "..bytes_per)
 	print("mtotal:\t"..mtotal)
 	print("frames:\t"..f_available)
-	print("f:\t\t"..f)
+	print("f:\t\t"..frms)
 	print("bmap:\t"..bmap.." => "..bmap*8)
-	print("mstart:\t"..mstart)
-	print(offset.." "..ms.."-"..me)
+	print("mstart:\t"..bmap_end)
+	print(moffset.." "..mstart.."-"..mend)
 end
