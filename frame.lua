@@ -26,7 +26,7 @@ function frame(value, addr)
     if type(value) == "table" then
         powo(addr, value)
     elseif type(value) == "number" then
-        poby(addr, value)
+        poby(addr + word_size - 1, value) -- poke to the LSB
     end
 
     -- assigns the metatable

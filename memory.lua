@@ -268,7 +268,7 @@ end
 
 -- checks if an address is word-alligned
 function word_alligned(addr)
-	assert(addr % word_size == 0, "address is not word alligned: "..tostr(addr))
+	assert((addr - mstart) % word_size == 0, "address is not word alligned: "..tostr(addr))
 end
 
 
