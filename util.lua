@@ -17,6 +17,33 @@ function to_bin(num)
     return bin
 end
 
+function to_hex(num, ox)
+
+    if (ox == nil) ox = true
+
+    if num == 0 then
+        if (ox) return "0x/"
+        return "/"
+    end
+
+    -- sets the prefix
+    local hex = ""
+
+    hex ..= tostr(num, true)
+
+    if (not ox) hex = sub(hex, 3)
+
+    for i = 0, #hex - 1 do
+        if hex[i] == "." then
+            hex = sub(hex, 0, i - 1)
+            break
+        end
+    end
+
+    return hex
+end
+
+
 
 --	prints address, binary value
 --	at the address, and

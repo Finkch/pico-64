@@ -10,6 +10,8 @@ __lua__
 #include register.lua
 #include inops.lua
 #include flops.lua
+#include frame.lua
+
 
 function _init()
 	word_size = 8 -- in bytes
@@ -22,14 +24,32 @@ function _init()
 	
 	init_memory(word_size)
 
+	init_frames()
+
+	xcnt = 0
+
+	f1 = frame()
+
+	poke(f1.addr + word_size - 1, 17)
+
 end
 
 function _update()
+
+	if btnp(❎) then
+		xcnt += 1
+	end
+
+	if btnp(❎) and xcnt == 1 then
+		f1:deallocate()
+	end
+
 end
 
 function _draw()
 	cls(0)
 	draw_memory()
+	print(f1)
 	print("")
 	
 	--	prints some of bit-map

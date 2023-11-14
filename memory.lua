@@ -32,11 +32,12 @@ function allocate(fnum)
 
 	--	gets the index of the 
 	--	first available frame
-    if (fnan == nil) local faf=get_faf()
+    local faf = -1
+    if (fnan == nil) faf = get_faf()
 	
 	--	throws error if there's no
 	--	memory available
-	assert(faf, "can't find frame")
+	assert(faf >= 0, "can't find frame "..tostr(faf))
 
     -- ensures frame is empty
     --assert(faf)
@@ -51,10 +52,10 @@ function allocate(fnum)
 	assert(f_available >= 0, "out of memory")
 	
 	--	clears the frame
-	clear_mem(mstartr + faf * 8, word_size)
+	clear_mem(mstart + faf * 8, word_size)
 	
 	--	returns the frame's index
-	return faf
+	return faf, mstart + faf * word_size
 end
 
 --	searches through the bitmap
@@ -64,7 +65,7 @@ function get_faf()
 	for i = 0, bmap do	--	all bytes
 		for j = 0, 7 do	--	bit in btye
 			--	checks if bit is 0
-			if @(offset + i) & (1 << j) == 0 then
+			if @(moffset + i) & (1 << j) == 0 then
 				return 8 * i + j	--	returns idx
 			end
 		end
@@ -102,7 +103,7 @@ end
 --	checks the state of a flag
 function f_bmap(idx)
 	--	gets the address
-	local ma = offset + flr(idx / 8)
+	local ma = moffset + flr(idx / 8)
 	
 	--	shifts right so the important
 	--	bit is the first one, and
