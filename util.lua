@@ -17,10 +17,12 @@ function to_bin(num)
     return bin
 end
 
-function to_hex(num, ox)
+function to_hex(num, ox, byte)
 
     if (ox == nil) ox = true
+    if (byte == nil) byte = true
 
+    -- zero case
     if num == 0 then
         if (ox) return "0x/"
         return "/"
@@ -31,8 +33,13 @@ function to_hex(num, ox)
 
     hex ..= tostr(num, true)
 
+    -- we only work with bytes, not two bytes; removes two leading zeroes
+    if (byte) hex = sub(hex, 1, 2)..sub(hex, 5)
+
+    -- remove the "0x" if necessary
     if (not ox) hex = sub(hex, 3)
 
+    -- remove the decimal place
     for i = 0, #hex - 1 do
         if hex[i] == "." then
             hex = sub(hex, 0, i - 1)
@@ -46,7 +53,7 @@ end
 -- turns a word into hex
 function to_hexes(nums)
     local hex = ""
-    for i = 0, #nums - 1 do
+    for i = 0, #nums do
         hex ..= to_hex(nums[i], i == 0)
     end
     return hex

@@ -38,9 +38,6 @@ function allocate(fnum)
 	--	throws error if there's no
 	--	memory available
 	assert(faf >= 0, "can't find frame "..tostr(faf))
-
-    -- ensures frame is empty
-    --assert(faf)
 		
 	--	toggles the bitmap
 	toggle_bmap(faf)
@@ -202,7 +199,7 @@ function powo(addr, vals, reverse)
 
     if (reverse == nil) reverse = false
 
-    assert(#vals < word_size, "trying to poke too many values: "..tostr(#vals))
+    assert(#vals <= word_size, "trying to poke too many values: "..tostr(#vals))
     a_access(addr) -- checks for seg fault
 
     for i = 0, #vals - 1 do
@@ -216,7 +213,8 @@ end
 
 -- a safe poke (for bytes)
 function poby(addr, value)
-    assert(value < 0xff, "trying to set btye with too large value: "..tostr(value))
+    assert(value < 0x100, "trying to set btye with too large value: "..tostr(value))
+	assert(value >= 0, "trying to set byte with negative value: "..tostr(value))
     a_access(addr) -- for seg fault
     
     poke(addr, value)
@@ -272,7 +270,6 @@ end
 function word_alligned(addr)
 	assert(addr % word_size == 0, "address is not word alligned: "..tostr(addr))
 end
-
 
 
 
