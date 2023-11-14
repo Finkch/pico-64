@@ -9,8 +9,13 @@ function frame(value, addr)
         deallocate = function(self) -- a function to deallocate the frame
             deallocate(self.frame_num)
         end,
-        set = function(self, value, index) -- pokes a byte
-            poby(index, value)
+        set = function(self, index, value) -- pokes a byte
+            c_access(index)
+            poby(self.addr + index, value)
+        end,
+        get = function(self, index) -- gets a byte in the word
+            c_access(index)
+            return peby(self.addr + index)
         end,
         word = function(self) -- returns the word at the frame's address
             return pewo(self.addr)
