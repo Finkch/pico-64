@@ -1,5 +1,5 @@
 -- creates a frame
-function frame(addr)
+function frame(value, addr)
     
     -- holds the relevant data
     frame_num, addr = allocate(addr)
@@ -8,8 +8,18 @@ function frame(addr)
         addr = addr, -- absolute address
         deallocate = function(self) -- a function to deallocate the frame
             deallocate(self.frame_num)
+        end,
+        set = function(self, value, index)
+            poby(index, value)
         end
     }
+
+    -- sets default values
+    if type(value) == "table" then
+        powo(addr, value)
+    elseif type(value) == "number" then
+        poby(addr, value)
+    end
 
     -- assigns the metatable
     setmetatable(f, frame_mt)
