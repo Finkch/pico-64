@@ -178,21 +178,26 @@ end
 
 --	ensures memory accesses
 --	are legal accesses
+
+-- bit in word, relative word
 function can_access(w_i, b_i, from_bmap)
     c_access(b_i)
     m_access(w_i, from_bmap)
 end
 
+-- bit in bytes
 function b_access(b_i)
     assert(b_i < 8, "illegal access right")
 	assert(b_i >= 0, "illegal access left")
 end
 
+-- bit in word
 function c_access(b_i)
 	assert(b_i < word_size, "illegal access right")
 	assert(b_i >= 0, "illegal access left")
 end
 
+-- relative word
 function m_access(w_i, from_bmap)
 
     -- gets the start of from where to check
@@ -204,7 +209,7 @@ function m_access(w_i, from_bmap)
     assert(ms + w_i >= moffset, "segmentation fault left")
 end
 
--- this one is absolute addressing 
+-- absolute address
 function a_access(addr)
     assert(addr < mend, "segmentation fault right")
     assert(addr >= mstart, "segmentation fault left")
