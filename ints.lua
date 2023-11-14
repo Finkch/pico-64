@@ -74,6 +74,28 @@ function init_ints()
 
             return c
         end,
+
+
+
+        -- inverses the number, the same as "* -1"
+        __not = function(self)
+
+            local c = int()
+
+            -- takes the negation of all the bytes
+            for i = 0, word_size - 1 do
+                poby(c.frame.addr + i, ~peby(self.frame.addr + i) & 0xff)
+            end
+
+            -- adds 1 (for 2's complement)
+            local d = c + 1
+
+            -- clears up memory
+            c.frame:deallocate()
+
+            return d
+
+        end,
         __tostring = function(self)
             return tostr(self.frame)
         end,
