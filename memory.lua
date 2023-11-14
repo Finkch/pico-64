@@ -33,7 +33,7 @@ function allocate(fnum)
 	--	gets the index of the 
 	--	first available frame
     local faf = -1
-    if (fnan == nil) faf = get_faf()
+    if (fnum == nil) faf = get_faf()
 	
 	--	throws error if there's no
 	--	memory available
