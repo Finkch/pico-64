@@ -10,7 +10,7 @@ function to_bin(num)
     
     --	stitches together bitwise
     for i = 7, 0, -1 do
-        bin ..= num \ 2 ^ i % 2
+        bin ..= (num >> i) & 1
     end
  
     --	returns
