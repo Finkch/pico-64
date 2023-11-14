@@ -9,8 +9,11 @@ function frame(value, addr)
         deallocate = function(self) -- a function to deallocate the frame
             deallocate(self.frame_num)
         end,
-        set = function(self, value, index)
+        set = function(self, value, index) -- pokes a byte
             poby(index, value)
+        end,
+        word = function(self) -- returns the word at the frame's address
+            return pewo(self.addr)
         end
     }
 
@@ -31,11 +34,7 @@ end
 function init_frames()
     frame_mt = {
         __tostring = function(self)
-            local str = ""
-            for i = 0, word_size - 1 do
-                str = str..to_hex(@(self.addr + i), i == 0) -- prints in hex (pico-8 readout it small)
-            end
-            return str
+            return to_hexes(self:word())
         end
     }
 end

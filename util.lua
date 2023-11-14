@@ -43,6 +43,15 @@ function to_hex(num, ox)
     return hex
 end
 
+-- turns a word into hex
+function to_hexes(nums)
+    local hex = ""
+    for i = 0, #nums - 1 do
+        hex ..= to_hex(nums[i], i == 0)
+    end
+    return hex
+end
+
 
 
 --	prints address, binary value
