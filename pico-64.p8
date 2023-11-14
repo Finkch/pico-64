@@ -7,9 +7,8 @@ __lua__
 
 #include memory.lua
 #include util.lua
-#include register.lua
-#include inops.lua
-#include flops.lua
+#include ints.lua
+#include floats.lua
 #include frame.lua
 
 
