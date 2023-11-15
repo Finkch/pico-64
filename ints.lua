@@ -1,7 +1,16 @@
 -- ints
 function int(vals)
     local int = {
-        frame = frame(vals)
+        frame = frame(vals),
+        copy = function(self) -- shallow copy of the variable
+            local c = int()
+
+            for i = 0, word_size - 1 do
+                c.frame:set(i, self.frame:get(i))
+            end
+            
+            return c
+        end
     }
 
     setmetatable(int, int_mt)
