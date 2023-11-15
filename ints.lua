@@ -15,6 +15,7 @@ function init_ints()
         __add = function(a, b)
             local c = int()
 
+            local overflow = false
             local carry = 0
 
             -- 16-bit + n-bit case
@@ -42,12 +43,12 @@ function init_ints()
                     if i != 0 then
                         c.frame:set(i - 1, carry)
                     else
-                        assert(carry == 0, "overflow during addition: "..tostr(carry)..", "..(a.frame:get(i) + (b & 0xff) + carry))
+                        overflow = carry == 0
                     end
                 end
 
 
-                return c
+                return c, overflow
             end
 
             -- n-bit + n-bit case
@@ -68,11 +69,11 @@ function init_ints()
                 if i != 0 then
                     c.frame:set(i - 1, carry)
                 else
-                    assert(carry == 0, "overflow during addition: "..tostr(carry)..", "..(a.frame:get(i) + b.frame:get(i) + carry))
+                    overflow = carry == 0
                 end
             end
 
-            return c
+            return c, overflow
         end,
 
 
@@ -107,7 +108,12 @@ function init_ints()
                 poby(c.frame.addr + i, ~peby(self.frame.addr + i) & 0xff)
             end
 
-            return c
+            -- takes the two's complement
+            d = c + 1
+
+            -- cleans up
+            c.frame:deallocate()
+            return d
 
         end,
         __tostring = function(self)
