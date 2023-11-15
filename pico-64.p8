@@ -24,6 +24,8 @@ function _init()
 	init_memory(word_size)
 
 	init_frames()
+	init_ints()
+	init_floats()
 
 	xcnt = 0
 
