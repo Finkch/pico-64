@@ -76,8 +76,28 @@ function init_ints()
         end,
 
 
+        -- subtraction
+        __sub = function(a, b)
+
+            -- convers b to n-bit if it isn't already
+            if (type(b) == "number") b = int(b)
+
+            -- negates b
+            local d = ~b
+
+            -- does the math
+            local c = a + d
+
+            -- cleans up
+            d.frame:deallocate()
+            return c
+        end,
+
+
 
         -- inverses the number, the same as "* -1"
+        -- note that we're doing 1s complement!
+        -- this is because we're not actually doing binary addition
         __not = function(self)
 
             local c = int()
@@ -87,13 +107,7 @@ function init_ints()
                 poby(c.frame.addr + i, ~peby(self.frame.addr + i) & 0xff)
             end
 
-            -- adds 1 (for 2's complement)
-            local d = c + 1
-
-            -- clears up memory
-            c.frame:deallocate()
-
-            return d
+            return c
 
         end,
         __tostring = function(self)
