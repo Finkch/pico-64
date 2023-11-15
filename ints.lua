@@ -89,17 +89,23 @@ function init_ints()
         -- subtraction
         __sub = function(a, b)
 
+
+            -- stores it in a new variable so that we can deallocate
+            -- the 16-byte int without deallocating a frame still in use
+            local e = b
+
             -- convers b to n-bit if it isn't already
-            if (type(b) == "number") b = int(b)
+            if (type(b) == "number") e = int(b)
 
             -- negates b
-            local d = ~b
+            local d = ~e
 
             -- does the math
             local c = a + d
 
             -- cleans up
             d.frame:deallocate()
+            if (type(b) == "number") e.frame:deallocate()
             return c
         end,
 
@@ -114,11 +120,11 @@ function init_ints()
 
             -- takes the negation of all the bytes
             for i = 0, word_size - 1 do
-                poby(c.frame.addr + i, ~peby(self.frame.addr + i) & 0xff)
+                c.frame:set(i, ~self.frame:get(i) & 0xff)
             end
 
             -- takes the two's complement
-            d = c + 1
+            local d = c + 1
 
             -- cleans up
             c.frame:deallocate()
