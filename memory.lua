@@ -177,6 +177,9 @@ end
 -- checks if a word is zero
 function is_zerowo(addr, relative)
 
+	-- gets the address of the word, if an int was supplied
+	if (type(addr) != "number") addr = addr.frame.addr
+
 	-- updates address if it is relative
 	if (relative) addr = mstart + addr * word_size
 

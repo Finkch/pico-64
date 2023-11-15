@@ -111,6 +111,53 @@ function init_ints()
 
 
 
+        -- multiplication
+        __mul = function(a, b)
+
+            local c = int() -- lower register
+            local d = int() -- upper register
+            local multiplicand = a:copy() -- multiplicand
+            local multiplier = b:copy() -- multiplier
+
+
+            -- iterates over every bit in the frame
+            for i = 0, word_size * 8 - 1 do
+
+                -- checks if the LSB of the multiplier is zero
+                if is_true(multiplier.frame:get(word_size - 1) & 0x1) then
+                    
+                    -- does a little dance to properly allocate and deallocate frames
+                    local e = d + multiplicand
+                    d.frame:deallocate()
+                    d = e
+                end
+
+                -- shifts lower product right one
+                c >>= 1
+
+                -- if the LSB of the upper is 1, move the one into the MSB of the lower
+                if (is_true(d.frame:get(word_size - 1) & 0x1)) c.frame:set(0, c.frame:get(0) | (1 << 7))
+
+                -- shifts upper right one
+                d >>= 1
+
+                -- shifts multiplier right one
+                multiplier >>= 1
+            end
+
+
+            -- checks for an overflow
+            local overflow = not is_true(is_zerowo(d))
+
+            -- cleans up
+            d.frame:deallocate()
+            multiplicand.frame:deallocate()
+            multiplier.frame:deallocate()
+            return c, overflow
+        end,
+
+
+
         -- inverses the number, the same as "* -1"
         -- note that we're doing 1s complement!
         -- this is because we're not actually doing binary addition
