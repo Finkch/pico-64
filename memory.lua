@@ -49,7 +49,7 @@ function allocate(fnum)
 	assert(f_available >= 0, "out of memory")
 	
 	--	clears the frame
-	clear_mem(mstart + faf * word_size, word_size)
+	clear_mem(mstart + faf * word_size, word_size - 1)
 	
 	--	returns the frame's index
 	return faf, mstart + faf * word_size
