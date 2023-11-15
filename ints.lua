@@ -131,6 +131,63 @@ function init_ints()
             return d
 
         end,
+
+        -- left shift
+        -- this is an *in place* operation; no new frames are allocated
+        __shl = function(self, shmt)
+
+            -- iterates shmt times
+            for i = 0, shmt - 1 do
+
+                -- iterates over every byte
+                for i = 0, word_size - 1 do
+
+                    -- places a one in the LSB of the previous byte is necessary
+                    if (i != 0 and is_true(self.frame:get(i) & (1 << 7))) self.frame:set(i - 1, self.frame:get(i - 1) | 0x1)
+
+                    -- shifts left one
+                    -- the and is to not overflow into two-bytes
+                    self.frame:set(i, (self.frame:get(i) << 1) & 0xff)
+                    
+                end
+            end
+
+            return self
+        end,
+
+        -- right shift (logical)
+        __lshr = function(self, shmt)
+
+            -- iterates shmt times
+            for i = 0, shmt - 1 do
+
+                -- iterates over every byte
+                for i = word_size - 1, 0, -1 do
+
+                    -- places a one in the LSB of the previous byte is necessary
+                    if (i != word_size - 1 and is_true(self.frame:get(i) & 0x1)) self.frame:set(i + 1, self.frame:get(i + 1) | (0x1 << 7))
+
+                    -- shifts left one
+                    -- the and is to not overflow into two-bytes
+                    self.frame:set(i, (self.frame:get(i) >>> 1) & 0xff)
+                    
+                end
+            end
+
+            return self
+        end,
+
+        -- right shift (not logical)
+        -- just kidding, i'm forcing them to be the same
+        __shr = function(self, shmt)
+            return self >>> shmt
+        end,
+
+
+        __gc = function(self) -- unimplemented in pico-8 :frown:
+            self.frame:deallocate()
+        end,
+
         __tostring = function(self)
             return tostr(self.frame)
         end,

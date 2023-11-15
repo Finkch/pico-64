@@ -60,6 +60,12 @@ function to_hexes(nums)
 end
 
 
+-- transforms 0-1 to false-true
+-- 0 is false, all other numbers are true
+function is_true(check)
+    return check != 0
+end
+
 
 --	prints address, binary value
 --	at the address, and
