@@ -238,6 +238,32 @@ function init_ints()
             return dividend
         end,
 
+
+
+        -- exponentiation
+        -- assume a is an int
+        __pow = function(a, b)
+
+            local c = int(1)
+            local d = 0
+
+            -- the easy case
+            if (b == 0) return c
+
+            -- multiplies c by a, b times
+            -- ...while managing memory
+            for i = 1, b do
+                d = a * c
+                c.frame:deallocate()
+                c = d
+            end
+
+            return c
+        end,
+
+
+
+
         -- a == b
         __eq = function(a, b)
 
