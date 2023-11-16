@@ -158,6 +158,46 @@ function init_ints()
 
 
 
+        -- a == b
+        __eq = function(a, b)
+
+            -- compares each bytes for eqauivalence
+            for i = 0, word_size - 1 do
+                if (a.frame:get(i) != b.frame:get(i)) return false
+            end
+            return true
+        end,
+
+        -- a < b
+        __lt = function(a, b)
+
+            -- compares each byte
+            for i = 0, word_size - 1 do
+
+                -- check if the upper bytes of a are less than or eqaul to b
+                if i != word_size - 1 and a.frame:get(i) > b.frame:get(i) then
+                    return false
+
+                -- for the LSB, check if it is strictly lesser
+                elseif i == word_size - 1 then
+                    return a.frame:get(i) < b.frame:get(i) 
+                end
+            end
+        end,
+
+        -- a <= b
+        __le = function(a, b)
+
+            -- checks if any of the bytes in a are greater than b's
+            for i = 0, word_size - 1 do
+                if (a.frame:get(i) > b.frame:get(i)) return false
+            end
+
+            return true
+        end,
+
+
+
         -- inverses the number, the same as "* -1"
         -- note that we're doing 1s complement!
         -- this is because we're not actually doing binary addition
