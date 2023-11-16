@@ -115,6 +115,8 @@ function init_ints()
         __mul = function(a, b)
 
              -- handles the an input being a number
+            if (type(a) == "number") a, b = b, a
+            local e = b
             if (type(e) == "number")  b = int(b)
 
             local c = int() -- lower register
@@ -161,6 +163,80 @@ function init_ints()
         end,
 
 
+        -- division
+        -- it is assumed that a is an int
+        __div = function(a, b)
+            return a \ b
+        end,
+
+        __idiv = function(a, b)
+
+            -- handles an input being a number
+            if (type(a) == "number") a, b = b, a
+            local e = b
+            if (type(b) == "number") b = int(b)
+
+            local c = int(0)
+            local d = 0
+            local dividend = a:copy()
+            local divisor = b:copy()
+
+            while dividend > divisor do
+                
+                -- increments the quotient
+                -- ...while managing memory
+                d = c + 1
+                c.frame:deallocate()
+                c = d
+
+                -- does a step of integer division
+                -- ...while managing memory
+                d = dividend - divisor
+                dividend.frame:deallocate()
+                dividend = d
+            end
+
+
+            -- cleans up
+            divisor.frame:deallocate()
+            dividend.frame:deallocate()
+            if (type(e) == "number") b.frame:deallocate()
+            return c
+        end,
+
+        __mod = function(a, b)
+            -- handles an input being a number
+            if (type(a) == "number") a, b = b, a
+            local e = b
+            if (type(b) == "number") b = int(b)
+
+            local c = int(0)
+            local d = 0
+            local dividend = a:copy()
+            local divisor = b:copy()
+
+            while dividend > divisor do
+                
+                -- increments the quotient
+                -- ...while managing memory
+                d = c + 1
+                c.frame:deallocate()
+                c = d
+
+                -- does a step of integer division
+                -- ...while managing memory
+                d = dividend - divisor
+                dividend.frame:deallocate()
+                dividend = d
+            end
+
+
+            -- cleans up
+            c.frame:deallocate()
+            divisor.frame:deallocate()
+            if (type(e) == "number") b.frame:deallocate()
+            return dividend
+        end,
 
         -- a == b
         __eq = function(a, b)
