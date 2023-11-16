@@ -114,7 +114,7 @@ function init_ints()
         -- multiplication
         __mul = function(a, b)
 
-            local e = b -- handles the other input being a number
+             -- handles the an input being a number
             if (type(e) == "number")  b = int(b)
 
             local c = int() -- lower register
