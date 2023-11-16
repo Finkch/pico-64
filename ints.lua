@@ -114,6 +114,9 @@ function init_ints()
         -- multiplication
         __mul = function(a, b)
 
+            local e = b -- handles the other input being a number
+            if (type(e) == "number")  b = int(b)
+
             local c = int() -- lower register
             local d = int() -- upper register
             local multiplicand = a:copy() -- multiplicand
@@ -151,6 +154,7 @@ function init_ints()
 
             -- cleans up
             d.frame:deallocate()
+            if (type(e) == "number") b.frame:deallocate()
             multiplicand.frame:deallocate()
             multiplier.frame:deallocate()
             return c, overflow
